@@ -24,6 +24,19 @@ class VendaAdmin(admin.ModelAdmin):
         return obj.cliente.nome if obj.cliente else "-"
     cliente_nome.short_description = 'Cliente'
 
+    def response_add(self, request, obj, post_url_continue=None):
+        try:
+            return super().response_add(request, obj, post_url_continue)
+        except ValueError as e:
+            self.message_user(request, str(e), level='error')
+            return None
+
+    def response_change(self, request, obj):
+        try:
+            return super().response_change(request, obj)
+        except ValueError as e:
+            self.message_user(request, str(e), level='error')
+            return None
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Produto, ProdutoAdmin)
